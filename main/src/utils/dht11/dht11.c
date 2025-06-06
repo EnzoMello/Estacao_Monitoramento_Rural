@@ -1,4 +1,4 @@
-#include "DHT22.h"
+#include "DHT11.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -19,7 +19,7 @@
  * @warning É importante chamar essa função antes de qualquer operação de leitura ou envio de pulso
  * para garantir que o pino esteja devidamente configurado.
  */
-void dht22_init() {
+void dht11_init() {
     gpio_init(DHT_PIN);
 }
 
@@ -34,7 +34,7 @@ void dht22_init() {
  * e cada um desses pulsos tem sua duração. O microcontrolador interpreta essa duração de cada um 
  * e separa os bits de temp e humid.
  */
-static uint32_t dht22_read_pulse(bool level) {  
+static uint32_t dht11_read_pulse(bool level) {  
     uint32_t init = time_us_32();
 
     // Se o nível atual passar o tempo limite sem mudar, interrompe o loop
@@ -54,7 +54,7 @@ static uint32_t dht22_read_pulse(bool level) {
  * @note O microcontrolador precisa envia um pulso baixo de aproximadamente 18 ms seguido por um curto pulso alto.
  *
  */
-void dht22_send_pulse_start() {
+void dht11_send_pulse_start() {
     gpio_set_dir(DHT_PIN, GPIO_OUT);
     gpio_put(DHT_PIN, 0);
     sleep_ms(18);
@@ -72,25 +72,25 @@ void dht22_send_pulse_start() {
  * 
  * @note O DHT transmite 40 bits(umidade, temperatura e checksum), que são interpretados e armazenados em um vetor.
  */
-bool dht22_read_dht22_data(uint8_t *data) {
+bool dht11_read_dht11_data(uint8_t *data) {
     memset(data, 0, 5); // 
 
     // Se os pulsos de inicialização forem igual ao limite, falha na leitura
-    if (dht22_read_pulse(0) == TIMEOUT_DHT || dht22_read_pulse(1) == TIMEOUT_DHT) {
-        printf("Error: No sensor DHT22 response");
+    if (dht11_read_pulse(0) == TIMEOUT_DHT || dht11_read_pulse(1) == TIMEOUT_DHT) {
+        printf("Error: No sensor DHT11 response");
         return false;
     }
 
 
     for (int i = 0; i < 40; i++) {
         // Cada bit de dados, começa pelo pulso baixo e se chegar no tempo limite, falha.
-        if (dht22_read_pulse(0) == TIMEOUT_DHT) {
+        if (dht11_read_pulse(0) == TIMEOUT_DHT) {
             printf("Error: Low pulse too long");
             return false;
         }
 
         // O próximo nível é o alto, 
-        uint32_t pulse_duration = dht22_read_pulse(1);
+        uint32_t pulse_duration = dht11_read_pulse(1);
         if (pulse_duration == TIMEOUT_DHT) {
             printf("Error: High pulse too long");
             return false;
@@ -120,27 +120,18 @@ bool dht22_read_dht22_data(uint8_t *data) {
  * @param humidity Ponteiro para armazenar a umidade relativa lida em porcentagem.
  * @return true se a leitura e conversão forem bem-sucedidas; false em caso de erro.
  */
-bool dht22_get(float *temperature, float *humidity) {
+bool dht11_get(int *temperature, int *humidity) {
     
     // Obtém dados brutos e armazena no vetor
     uint8_t data[5];
-    if (!dht22_read_dht22_data(data)) {
+
+    if (!dht11_read_dht11_data(data)) {
         return false;  
     }
 
-    // Pega ss dois primeiros bits, que são a humidade e divide por 10 para obter em porcentagem.
-    uint16_t raw_humidity = (data[0] << 8) | data[1];
-    *humidity = raw_humidity / 10.0;
-
-    // Pega os próximos dois bits, de temperatura.
-    uint16_t raw_temperature = (data[2] << 8) | data[3];
-    // Verifica se o bit de sinal, o 15, é negativo e converte o sinal caso seja negativo. Depois, divide por 10 para obter a temperatura exata.
-    if (raw_temperature & 0x8000) {
-        raw_temperature &= 0x7FFF;
-        *temperature = (raw_temperature / 10.0) * -1.0;
-    } else {
-        *temperature = raw_temperature / 10.0;
-    }
+    *humidity = data[0];
+    *temperature = data[2]; 
+ 
 
     return true;
 }

@@ -3,7 +3,7 @@
 #include "pico/stdlib.h"
 
 // bibliotecas utilitárias para os sensores e outros componentes
-#include "dht22.h"
+#include "dht11.h"
 
 
 // Função responsável por inicializar os componentes
@@ -13,7 +13,7 @@ void setup() {
     stdio_init_all();
 
     // inicializando o sensor DHT22
-    dht22_init();
+    dht11_init();
 }
 
 int main()
@@ -25,15 +25,17 @@ int main()
     /* ---------> TESTES <--------- */
 
     // variáveis para armazenar os valores de temperatura e umidade
-    float temperature, humidty;
+    int temperature, humidty;
 
     while (true) {
 
+        dht11_send_pulse_start();
+
         // fazendo leitura e exibindo os valores no serial monitor
-        if (dht22_get(&temperature, &humidty)) {
-            printf("Temperature: %.2f - Humidity: %.1f% \n", temperature, humidty);
+        if (dht11_get(&temperature, &humidty)) {
+            printf("Temperature: %d °C - Humidity: %d \n", temperature, humidty);
         } else {
-            printf("Failed to read dht22 data\n");
+            printf("Failed to read dht11 data\n");
         }
 
         sleep_ms(1000);
