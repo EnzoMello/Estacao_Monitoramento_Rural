@@ -15,6 +15,18 @@ void display_init() {
     }
 }
 
+void display_write(const char *msg, uint x, uint y, uint size) {
+    ssd1306_draw_string(&display, x, y, size, msg);
+}
+
+void display_show() {
+    ssd1306_show(&display);
+}
+
+void display_clear() {
+    ssd1306_clear(&display);
+}
+
 void display_message(const char *message) {
     char buffer[32];
     int line = 0;

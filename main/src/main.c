@@ -5,9 +5,34 @@
 // bibliotecas utilitárias para os sensores e outros componentes
 #include "dht11.h"
 #include "mq135.h"
-#include "utils/display/display.h"
+#include "display.h"
+#include "wifi.h"
 
+// função para iniciar a conexão wifi e exibir os feedbacks de conexão no display
+int init_wifi_connection() {
 
+    // displaying the name of the wifi network
+    display_clear();
+    display_write("Conectando em:", 23, 20, 1);
+    display_write(WIFI_SSID, 23, 32, 1);
+    display_show();
+
+    // trying to connect to the network and retrieving connection status
+    int state_connection = wifi_connect();
+
+    // show state of connection on display
+    display_clear();
+    if (state_connection == 0) {
+        display_write("CONEXAO ESTABECIDA", 10, 30, 1);
+        printf("IP do dispositivo: %s\n", ipaddr_ntoa(&netif_default->ip_addr));
+    } else {
+        display_write("FALHA NA CONEXAO", 10, 30, 1);
+    }
+    display_show();
+    sleep_ms(3000);
+
+    return state_connection;
+}
 
 // Função responsável por inicializar os componentes
 void setup() {
@@ -21,6 +46,7 @@ void setup() {
     // inicializa o sensor de gás MQ135
     mq135_init();
 
+    // inicializa o display
     display_init();
     
 }
@@ -31,7 +57,10 @@ int main()
     // inicializando os dispositivos
     setup();
 
-
+    // tentando se conectar a rede wifi
+    if (init_wifi_connection() == 0) {
+        // conexão realizada com sucesso
+    }
 
     /* ---------> TESTES <--------- */
 

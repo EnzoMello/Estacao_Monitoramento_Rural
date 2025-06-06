@@ -13,6 +13,9 @@ static ssd1306_t display;
 #define I2C_SCL 15
 
 void display_init();
+void display_write(const char *msg, uint x, uint y, uint size);
+void display_show();
+void display_clear();
 
 void display_message(const char *message);
 void display_data(int temp, int humidty, const char* alert_msg);

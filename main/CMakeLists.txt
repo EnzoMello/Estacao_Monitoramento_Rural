@@ -62,6 +62,7 @@ target_link_libraries(main
     hardware_adc
     pico_stdlib
     hardware_i2c
+    pico_cyw43_arch_lwip_threadsafe_background
 )
 
 # Add the standard include files to the build
@@ -70,6 +71,8 @@ target_include_directories(main PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/dht11
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/mq135
     ${CMAKE_CURRENT_LIST_DIR}/src/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/src/utils/display
+    ${CMAKE_CURRENT_LIST_DIR}/src/utils/wifi
 )
 
 # Add any user requested libraries
