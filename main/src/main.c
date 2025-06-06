@@ -5,6 +5,7 @@
 // bibliotecas utilitárias para os sensores e outros componentes
 #include "dht11.h"
 #include "mq135.h"
+#include "utils/display/display.h"
 
 
 
@@ -19,6 +20,7 @@ void setup() {
 
     mq135_init();
 
+    display_init();
     
 }
 
@@ -28,10 +30,17 @@ int main()
     // inicializando os dispositivos
     setup();
 
+
+
     /* ---------> TESTES <--------- */
+
+    // Texto de título para simulação
+    char title_message[128] = "";
+    int temperature_example;
 
     // variáveis para armazenar os valores de temperatura e umidade
     int temperature, humidty;
+
 
     
 
@@ -42,15 +51,21 @@ int main()
         dht11_send_pulse_start();
 
 
-        air_quality_category(read_mq135());
+        printf("Qualidade do ar: %s \n", air_quality_category(read_mq135()));
 
         // fazendo leitura e exibindo os valores no serial monitor
         if (dht11_get(&temperature, &humidty)) {
-            //printf("Temperature: %d °C - Humidity: %d \n", temperature, humidty);
+            printf("Temperature: %d °C - Humidity: %d \n", temperature, humidty);
+            display_data()
 
         } else {
-            //printf("Failed to read dht11 data\n");
+            printf("Failed to read dht11 data\n");
         }
+
+        temperature_example = dht11_get(&temperature, &humidty);
+
+
+        display_data(10,10, air_quality_category(read_mq135()));
 
         sleep_ms(1000);
     }

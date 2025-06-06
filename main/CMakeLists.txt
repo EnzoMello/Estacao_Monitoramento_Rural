@@ -43,6 +43,8 @@ file(GLOB_RECURSE LIBS "src/utils/**/*.c")
 add_executable(main 
     ${MAIN}
     ${LIBS}
+    src/utils/display/display.c
+    
 )
 
 pico_set_program_name(main "main")
@@ -52,19 +54,24 @@ pico_set_program_version(main "0.1")
 pico_enable_stdio_uart(main 0)
 pico_enable_stdio_usb(main 1)
 
+
+add_subdirectory("C:/Users/enzom/Documents/EnzoEstudos/Estacao_Monitoramento_Rural/main/src/pico-ssd1306") # <- Atualize conforme o local real da biblioteca
+
 # Add the standard library to the build
 target_link_libraries(main
     hardware_adc
     pico_stdlib
     hardware_i2c
+    pico-ssd1306
 )
 
 # Add the standard include files to the build
 target_include_directories(main PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/dht11
-    ${CMAKE_CURRENT_LIST_DIR}/src/utils/bmp280
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/mq135
+    ${CMAKE_CURRENT_LIST_DIR}
+    "C:/Users/enzom/Documents/EnzoEstudos/Estacao_Monitoramento_Rural/main/src/pico-ssd1306"
 )
 
 # Add any user requested libraries
