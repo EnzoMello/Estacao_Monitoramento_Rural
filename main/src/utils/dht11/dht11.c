@@ -4,13 +4,13 @@
 
 
 /**
- * @note O DHT22 ele não envia dados espontâneamente, ele depende sempre de um envio de um pulso inicial do microcontrolador
+ * @note O DHT11 ele não envia dados espontâneamente, ele depende sempre de um envio de um pulso inicial do microcontrolador
  * para ele começar a enviar seus pulsos de volta. O pulso é uma "chave" para ativar o sensor, é receber dados 
  */
 
 
  /**
- * @brief Inicializa o pino GPIO utilizado para comunicação com o sensor DHT22.
+ * @brief Inicializa o pino GPIO utilizado para comunicação com o sensor DHT11.
  *
  * @note Essa função apenas configura o pino definido por DHT_PIN para que possa ser utilizado 
  * posteriormente nas operações de leitura e envio de pulso. Ela não inicia nenhuma comunicação
@@ -24,7 +24,7 @@ void dht11_init() {
 }
 
 /**
- * @brief Lê a duração de um pulso no pino do sensor DHT22.
+ * @brief Lê a duração de um pulso no pino do sensor DHT11.
  *
  * @param level Nível lógico que deve ser aguardado: true (alto) ou false (baixo).
  * @return Duração do pulso em microssegundos, ou TIMEOUT_DHT em caso de timeout.
@@ -64,7 +64,7 @@ void dht11_send_pulse_start() {
 }
 
 /**
- * @brief Lê os dados brutos enviados pelo sensor DHT22.
+ * @brief Lê os dados brutos enviados pelo sensor DHT11.
  *
  *
  * @param data Vetor de 5 bytes onde os dados brutos serão armazenados.
@@ -113,7 +113,7 @@ bool dht11_read_dht11_data(uint8_t *data) {
 }
 
 /**
- * @brief Obtém e converte os dados brutos de temperatura e umidade do DHT22.
+ * @brief Obtém e converte os dados brutos de temperatura e umidade do DHT11.
  *
  *
  * @param temperature Ponteiro para armazenar a temperatura lida em graus Celsius.
