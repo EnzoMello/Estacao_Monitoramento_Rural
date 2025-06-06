@@ -24,7 +24,7 @@ const char* air_quality_category(float voltage) {
 }
 
 // Lê o valor do MQ-135 e retorna a voltagem correspondente
-int read_mq135() {
+float read_mq135() {
     adc_select_input(MQ135_ADC_INPUT);
     uint16_t raw_adc = adc_read();
     float voltage = read_voltage(raw_adc);
