@@ -1,4 +1,4 @@
-#ifdef MQ135_H
+#ifndef MQ135_H
 #define MQ135_H
 
 #include "pico/stdlib.h"

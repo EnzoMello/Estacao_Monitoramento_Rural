@@ -11,6 +11,7 @@ float read_voltage(uint16_t raw_adc) {
 
 // Estimativa simples de qualidade do ar
 const char* air_quality_category(float voltage) {
+    printf("Voltage %.2f \n", voltage);
     if (voltage < 1.0)
         return "Ar Muito Bom";
     else if (voltage < 1.5)

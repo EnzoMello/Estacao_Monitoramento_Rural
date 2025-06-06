@@ -4,6 +4,7 @@
 
 // bibliotecas utilitárias para os sensores e outros componentes
 #include "dht22.h"
+#include "mq135.h"
 
 
 // Função responsável por inicializar os componentes
@@ -14,6 +15,8 @@ void setup() {
 
     // inicializando o sensor DHT22
     dht22_init();
+    
+    mq135_init();
 }
 
 int main()
@@ -28,13 +31,15 @@ int main()
     float temperature, humidty;
 
     while (true) {
+        float voltage = read_mq135();
+        printf("Qualidade: %s \n",air_quality_category(voltage));
 
-        // fazendo leitura e exibindo os valores no serial monitor
-        if (dht22_get(&temperature, &humidty)) {
-            printf("Temperature: %.2f - Humidity: %.1f% \n", temperature, humidty);
-        } else {
-            printf("Failed to read dht22 data\n");
-        }
+        // // fazendo leitura e exibindo os valores no serial monitor
+        // if (dht22_get(&temperature, &humidty)) {
+        //     printf("Temperature: %.2f - Humidity: %.1f% \n", temperature, humidty);
+        // } else {
+        //     printf("Failed to read dht22 data\n");
+        // }
 
         sleep_ms(1000);
     }

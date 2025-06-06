@@ -54,6 +54,7 @@ pico_enable_stdio_usb(main 1)
 
 # Add the standard library to the build
 target_link_libraries(main
+    hardware_adc
     pico_stdlib
 )
 
@@ -67,7 +68,6 @@ target_include_directories(main PRIVATE
 
 # Add any user requested libraries
 target_link_libraries(main 
-    hardware_adc
 )
 
 pico_add_extra_outputs(main)
