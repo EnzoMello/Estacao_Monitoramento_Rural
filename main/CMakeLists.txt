@@ -62,11 +62,12 @@ target_include_directories(main PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/dht22
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/bmp280
+    ${CMAKE_CURRENT_LIST_DIR}/src/utils/mq135
 )
 
 # Add any user requested libraries
 target_link_libraries(main 
-    
+    hardware_adc
 )
 
 pico_add_extra_outputs(main)
