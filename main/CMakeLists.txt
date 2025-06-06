@@ -56,12 +56,13 @@ pico_enable_stdio_usb(main 1)
 target_link_libraries(main
     hardware_adc
     pico_stdlib
+    hardware_i2c
 )
 
 # Add the standard include files to the build
 target_include_directories(main PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
-    ${CMAKE_CURRENT_LIST_DIR}/src/utils/dht22
+    ${CMAKE_CURRENT_LIST_DIR}/src/utils/dht11
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/bmp280
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/mq135
 )
