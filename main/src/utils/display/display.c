@@ -46,11 +46,11 @@ void display_data(int temperature, int humidty, const char* alert_msg) {
 
     ssd1306_clear(&display);
 
-    snprintf(buffer, sizeof(buffer), "Temperatura: %d C", temperature);
+    snprintf(buffer, sizeof(buffer), "Temperatura: %d °C", temperature);
     ssd1306_draw_string(&display, 0, line * 10, 1, buffer);
     line++;
 
-    snprintf(buffer, sizeof(buffer), "Humidade: %d C", humidty);
+    snprintf(buffer, sizeof(buffer), "Humidade: %d %%", humidty);
     ssd1306_draw_string(&display, 0, line * 10, 1, buffer);
     line++;
 
