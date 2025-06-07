@@ -62,6 +62,7 @@ target_link_libraries(main
     hardware_adc
     pico_stdlib
     hardware_i2c
+    hardware_timer
     pico_cyw43_arch_lwip_threadsafe_background
 )
 
@@ -73,6 +74,7 @@ target_include_directories(main PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/src/drivers
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/display
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/wifi
+    ${CMAKE_CURRENT_LIST_DIR}/src/utils/button
 )
 
 # Add any user requested libraries

@@ -84,3 +84,11 @@ void display_data(int temperature, int humidty, const char* alert_msg) {
     ssd1306_show(&display);
 }
 
+void display_initial_screen() {
+    display_clear();
+
+    display_write("Para iniciar leitura", 7, 25, 1);
+    display_write("pressione B", 30, 37, 1);
+
+    display_show();
+}

@@ -19,5 +19,6 @@ void display_clear();
 
 void display_message(const char *message);
 void display_data(int temp, int humidty, const char* alert_msg);
+void display_initial_screen();
 
 #endif

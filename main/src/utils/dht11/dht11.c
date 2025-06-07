@@ -49,7 +49,7 @@ static uint32_t dht11_read_pulse(bool level) {
 }
 
 /**
- * @brief Envia o pulso de inicialização para o sensor DHT22 e prepara o GPIO para receber os dados dele.
+ * @brief Envia o pulso de inicialização para o sensor DHT11 e prepara o GPIO para receber os dados dele.
  *
  * @note O microcontrolador precisa envia um pulso baixo de aproximadamente 18 ms seguido por um curto pulso alto.
  *
@@ -130,12 +130,58 @@ bool dht11_get(int *temperature, int *humidity) {
     }
 
     *humidity = data[0];
-    *temperature = data[2]; 
- 
+    *temperature = data[2];  
 
     return true;
 }
 
+/**
+ * @brief Categoriza a temperatura em níveis descritivos de acordo com o valor lido.
+ *
+ * @param temperature Temperatura lida pelo sensor DHT11 em graus Celsius.
+ * @return Ponteiro para uma string constante contendo a descrição da categoria:
+ *         - "Muito Frio"      (temperature < 10)
+ *         - "Frio"            (10 <= temperature < 20)
+ *         - "Agradável"       (20 <= temperature < 30)
+ *         - "Quente"          (30 <= temperature < 35)
+ *         - "Muito Quente"    (temperature >= 35)
+ *
+ * @note Essa função permite associar um valor numérico de temperatura a uma descrição textual,
+ * facilitando a interpretação dos dados em sistemas embarcados ou interfaces de usuário.
+ */
+char *dht11_get_temperature_category(int temperature) {
+    if (temperature < 10)
+        return "Muito Frio";
+    else if (temperature < 20)
+        return "Frio";
+    else if (temperature < 30)
+        return "Agradável";
+    else if (temperature < 35)
+        return "Quente";
+    else
+        return "Muito Quente";
+}
 
-
-
+/**
+ * @brief Categoriza a umidade relativa em níveis descritivos de acordo com o valor lido.
+ *
+ * @param humidity Umidade relativa lida pelo sensor DHT11 em porcentagem (%).
+ * @return Ponteiro para uma string constante contendo a descrição da categoria:
+ *         - "Seco"            (humidity < 30)
+ *         - "Confortável"     (30 <= humidity < 60)
+ *         - "Úmido"           (60 <= humidity < 80)
+ *         - "Muito Úmido"     (humidity >= 80)
+ *
+ * @note Essa função permite associar um valor numérico de umidade a uma descrição textual,
+ * facilitando a interpretação dos dados ambientais pelo sistema ou pelo usuário.
+ */
+char *dht11_get_humidity_category(int humidity) {
+    if (humidity < 30)
+        return "Seco";
+    else if (humidity < 60)
+        return "Confortável";
+    else if (humidity < 80)
+        return "Úmido";
+    else
+        return "Muito Úmido";
+}

@@ -14,5 +14,7 @@ void dht11_init();
 void dht11_send_pulse_start();
 bool dht11_read_dht11_data(uint8_t *data);
 bool dht11_get(int *temperature, int *humidity);
+char *dht11_get_temperature_category(int temperature);
+char *dht11_get_humidity_category(int humidity);
 
 #endif

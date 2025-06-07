@@ -6,8 +6,8 @@
 #include "lwip/netif.h"
 
 // wifi credenciais
-#define WIFI_SSID "sua rede wifi"
-#define WIFI_PASS "sua senha"
+#define WIFI_SSID "ADRIANA CABELOS"
+#define WIFI_PASS "15162324"
 
 // definição das funções
 int wifi_connect();
