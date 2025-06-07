@@ -155,7 +155,7 @@ char *dht11_get_temperature_category(int temperature) {
     else if (temperature < 20)
         return "Frio";
     else if (temperature < 30)
-        return "Agradável";
+        return "Agradavel";
     else if (temperature < 35)
         return "Quente";
     else
@@ -179,9 +179,9 @@ char *dht11_get_humidity_category(int humidity) {
     if (humidity < 30)
         return "Seco";
     else if (humidity < 60)
-        return "Confortável";
+        return "Confortavel";
     else if (humidity < 80)
-        return "Úmido";
+        return "Umido";
     else
-        return "Muito Úmido";
+        return "Muito umido";
 }

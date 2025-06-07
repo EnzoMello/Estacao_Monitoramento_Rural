@@ -36,7 +36,9 @@ typedef struct {
 SensorData *global_sensor_data = NULL;
 
 // variáveis de controle
-bool button_is_active = false;
+bool button_is_active = false;          // para controlar quando o botão estará ativo ou não
+#define NUM_MAX_INFO 3                  // quantidade máxima de informações (temperatura, umidade e concentração de gás)
+int current_info = 0;                   // armazena em que informação está sendo exibida atualmente
 
 // estrutura de timer para tratar o efeito bounce do botão
 struct repeating_timer button_debouncing_timer;
@@ -65,6 +67,56 @@ int init_wifi_connection() {
     sleep_ms(3000);
 
     return state_connection;
+}
+
+// função para exibir os dados dos sensores no display
+void show_data_on_display(SensorData data) {
+    while (global_state == DISPLAY_DATA_STATE && current_info < NUM_MAX_INFO) {
+        
+        // caso esteja na primeira informação (temeratura)
+        if (current_info == 0) {
+            display_clear();
+            char temperature_value[25];
+            char temperature_status[50];
+            snprintf(temperature_value, sizeof(temperature_value), "Temperatura: %d C", data.temperature);
+            snprintf(temperature_status, sizeof(temperature_status), "Status: %s", data.temperatureCategory);
+            display_write(temperature_value, 0, 10, 1);
+            display_write(temperature_status, 0, 30, 1);
+            display_write("B para avancar", 0, 50, 1);
+            display_show();
+        }
+        
+        // caso esteja na segunda informação (umidade)
+        if (current_info == 1) {
+            display_clear();
+            char humidity_value[25];
+            char humidity_status[50];
+            snprintf(humidity_value, sizeof(humidity_value), "Umidade: %d %%", data.humidity);
+            snprintf(humidity_status, sizeof(humidity_status), "Status: %s", data.humidityCategory);
+            display_write(humidity_value, 0, 10, 1);
+            display_write(humidity_status, 0, 30, 1);
+            display_write("B para avancar", 0, 50, 1);
+            display_show();
+        }
+        
+        // caso esteja na terceita informação (concentração de gás)
+        if (current_info == 2) {
+            display_clear();
+            char polluaton_lv_value[30];
+            char polluaton_lv_status[50];
+            snprintf(polluaton_lv_value, sizeof(polluaton_lv_value), "poluicao ar: %.1f %%", data.pollutionLevel);
+            snprintf(polluaton_lv_status, sizeof(polluaton_lv_status), "Status: %s", data.airQualityCategory);
+            display_write(polluaton_lv_value, 0, 10, 1);
+            display_write(polluaton_lv_status, 0, 30, 1);
+            display_write("B para avancar", 0, 50, 1);
+            display_show();
+        }
+    }
+
+    // zerando o valor de current info
+    current_info = 0;
+    // exibindo no display a tela inicial
+    display_initial_screen();
 }
 
 // função para obter e armazenar as mensagens de alerta com base nos dados dos sensores
@@ -113,13 +165,18 @@ void gpio_irq_callback(uint gpio, uint32_t event) {
     // caso o botão não esteja ativo
     if (!button_is_active) return;
 
-    // TODO: criar uma função para tratar o efeito bounce
+    // tratando efeito bounce
     debouncing();
 
     // caso pressione o botão B esteja no estado inicial da alicaçaõ
     if(global_state == IDLE_STATE) {
         // muda o estado da aplicação para o modo leitura dos sensores
         global_state = SENSOR_READING_STATE;
+    }
+
+    // caso esteja no estado de exibição dos dados no display
+    if (global_state == DISPLAY_DATA_STATE && current_info < NUM_MAX_INFO) {
+        current_info++;
     }
     
 }
@@ -202,6 +259,7 @@ int main()
             // TODO: exibe os dados localmente no display
             // muda o estado da aplicação para o estado de exibição dos dados locais
             global_state = DISPLAY_DATA_STATE;
+            show_data_on_display(*global_sensor_data);
 
             // ao finalizar esse ciclo, coloca o estado novamente para o inicial (IDLE)
             global_state = IDLE_STATE;
