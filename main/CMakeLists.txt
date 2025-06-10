@@ -75,6 +75,7 @@ target_include_directories(main PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/display
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/wifi
     ${CMAKE_CURRENT_LIST_DIR}/src/utils/button
+    ${CMAKE_CURRENT_LIST_DIR}/src/utils/server
 )
 
 # Add any user requested libraries

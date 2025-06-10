@@ -10,6 +10,7 @@
 #include "display.h"
 #include "wifi.h"
 #include "button.h"
+#include "server.h"
 
 // máquina de estados para a aplicação
 typedef enum {
@@ -239,7 +240,12 @@ int main()
             int raw_value = mq135_read_raw();       // valor bruto ADC
             global_sensor_data->pollutionLevel = mq135_read_percentage(raw_value);  // valor convertido para porcentagem
 
-            // TODO: envia os dados para o servidor
+            // envia os dados para o servidor
+            server_send_data(
+                global_sensor_data->temperature,
+                global_sensor_data->humidity,
+                global_sensor_data->pollutionLevel
+            );
 
             // armazenando as mensagens de alerta com base nos dados
             get_and_store_alerts_message(global_sensor_data);
@@ -256,7 +262,7 @@ int main()
             printf("Categoria de Qualidade do Ar: %s\n", global_sensor_data->airQualityCategory);
             printf("============================\n");
 
-            // TODO: exibe os dados localmente no display
+            // exibe os dados localmente no display
             // muda o estado da aplicação para o estado de exibição dos dados locais
             global_state = DISPLAY_DATA_STATE;
             show_data_on_display(*global_sensor_data);
